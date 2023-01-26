@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +31,13 @@ public class BookController {
             logger.info("Inside AddBook Controller with request body: {}",addBookRequest);
             Book book =  bookService.addBook(addBookRequest);
             logger.info("Final Book object received in AddBookController: {}",book);
-            return ResponseEntity.ok().body(book);
-        } catch (BookAlreadyExistException | RuntimeException bookAlreadyExistException){
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        } catch (BookAlreadyExistException bookAlreadyExistException){
             logger.error("Exception occurred in AddBook Controller: {}",bookAlreadyExistException.getMessage());
-            return ResponseEntity.badRequest().body(bookAlreadyExistException.getMessage());
+            return new ResponseEntity<>(bookAlreadyExistException.getMessage(), HttpStatus.CONFLICT);
+        } catch (RuntimeException runtimeException){
+            logger.error("Exception occurred in AddBook Controller: {}",runtimeException.getMessage());
+            return new ResponseEntity<>(runtimeException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/books/update_quantity")
@@ -42,10 +46,16 @@ public class BookController {
             logger.info("Inside UpdateBookQuantity Controller with request body: {}",updateBookQuantityRequest);
             Book book =  bookService.updateQuantity(updateBookQuantityRequest.getId(), updateBookQuantityRequest.getQuantity());
             logger.info("Final Book object received in UpdateBookQuantity Controller: {}",book);
-            return ResponseEntity.ok().body(book);
-        } catch (BookNotFoundException | OutOfStockException | RuntimeException exception) {
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        } catch (BookNotFoundException exception) {
             logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
-            return ResponseEntity.internalServerError().body(exception.getMessage());
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (OutOfStockException exception) {
+            logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.OK);
+        } catch (RuntimeException exception) {
+            logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
