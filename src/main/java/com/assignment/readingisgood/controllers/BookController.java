@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import static com.assignment.readingisgood.utils.Constants.CONTROLLER_EXCEPTION_MESSAGE;
 
 
 @RestController
@@ -26,7 +27,7 @@ public class BookController {
     private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
     @PostMapping("/books/add")
-    public ResponseEntity addBook(@Valid @RequestBody AddBookRequest addBookRequest){
+    public ResponseEntity<Object> addBook(@Valid @RequestBody AddBookRequest addBookRequest){
         try{
             logger.info("Inside AddBook Controller with request body: {}",addBookRequest);
             Book book =  bookService.addBook(addBookRequest);
@@ -41,20 +42,21 @@ public class BookController {
         }
     }
     @PostMapping("/books/update_quantity")
-    public ResponseEntity updateBookQuantity(@Valid @RequestBody UpdateBookQuantityRequest updateBookQuantityRequest){
+    public ResponseEntity<Object> updateBookQuantity(@Valid @RequestBody UpdateBookQuantityRequest updateBookQuantityRequest){
+        String controllerName = "UpdateBookQuantity";
         try{
-            logger.info("Inside UpdateBookQuantity Controller with request body: {}",updateBookQuantityRequest);
+            logger.info("Inside {} Controller with request body: {}",controllerName,updateBookQuantityRequest);
             Book book =  bookService.updateQuantity(updateBookQuantityRequest.getId(), updateBookQuantityRequest.getQuantity());
-            logger.info("Final Book object received in UpdateBookQuantity Controller: {}",book);
+            logger.info("Final Book object received in {} Controller: {}",controllerName,book);
             return new ResponseEntity<>(book, HttpStatus.OK);
         } catch (BookNotFoundException exception) {
-            logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
+            logger.error(CONTROLLER_EXCEPTION_MESSAGE,controllerName,exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
         } catch (OutOfStockException exception) {
-            logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
+            logger.error(CONTROLLER_EXCEPTION_MESSAGE,controllerName,exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.OK);
         } catch (RuntimeException exception) {
-            logger.error("Exception occurred in UpdateBookQuantity Controller: {}",exception.getMessage());
+            logger.error(CONTROLLER_EXCEPTION_MESSAGE,controllerName,exception.getMessage());
             return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
