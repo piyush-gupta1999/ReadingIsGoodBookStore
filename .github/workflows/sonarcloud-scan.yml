@@ -54,7 +54,6 @@ jobs:
           args: >
             -Dsonar.organization=piyush-gupta1999
             -Dsonar.projectKey=piyush-gupta1999_ReadingIsGoodBookStore
-        run: mvn clean install && verify sonar:sonar
 
       - name: SonarCloud Scan
         env:
