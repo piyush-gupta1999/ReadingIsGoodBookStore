@@ -14,8 +14,6 @@
 	<name>readingisgood</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<sonar.organization>piyush-gupta1999</sonar.organization>
-		<sonar.host.url>http://sonarcloud.io/</sonar.host.url>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
