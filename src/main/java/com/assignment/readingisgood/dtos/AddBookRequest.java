@@ -9,6 +9,7 @@ import org.springframework.format.annotation.NumberFormat;
 @Getter
 @Setter
 @NonNull
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class AddBookRequest {
