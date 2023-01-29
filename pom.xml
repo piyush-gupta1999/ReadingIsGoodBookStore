@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.assignment</groupId>
 	<artifactId>readingisgood</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>readingisgood</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -109,5 +109,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub piyush-gupta1999 Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/piyush-gupta1999/ReadingIsGoodBookStore</url>
+		</repository>
+	</distributionManagement>
 
 </project>
